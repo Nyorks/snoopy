@@ -1,0 +1,161 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>please stay, Love</title>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@500;600;700&family=DM+Mono:wght@400;500&display=swap');
+
+      :root {
+        --ink: #302d2a;
+        --paper: #fffdf7;
+        --sky: #d9e9ed;
+        --blush: #f1d0c8;
+        --butter: #f7e6b4;
+        --ground: #efe3cf;
+      }
+      * { box-sizing: border-box; }
+      body {
+        min-height: 100vh;
+        margin: 0;
+        overflow-x: hidden;
+        color: var(--ink);
+        background: #fbf3e5;
+        font-family: "DM Mono", ui-monospace, monospace;
+      }
+      .sun { position: fixed; width: 52vw; max-width: 680px; aspect-ratio: 1; border-radius: 50%; background: #fae7ba; top: -20vw; right: -12vw; opacity: .58; z-index: -1; }
+      .cloud { position: fixed; z-index: -1; opacity: .55; background: var(--paper); width: 180px; height: 48px; border-radius: 50px; }
+      .cloud::before, .cloud::after { content: ""; position: absolute; border-radius: 50%; background: inherit; }
+      .cloud::before { width: 78px; height: 78px; left: 30px; bottom: 18px; }
+      .cloud::after { width: 58px; height: 58px; right: 25px; bottom: 12px; }
+      .cloud.one { top: 18%; left: -50px; transform: scale(.72); }
+      .cloud.two { top: 63%; right: -40px; transform: scale(.58); }
+      main { width: min(1080px, calc(100% - 40px)); margin: auto; padding: 26px 0 42px; }
+      nav { display: flex; justify-content: space-between; align-items: center; font-size: 11px; letter-spacing: .11em; text-transform: uppercase; }
+      .badge { border: 2px solid var(--ink); border-radius: 99px; padding: 8px 12px; background: var(--paper); transform: rotate(-2deg); }
+      .nav-note { color: #766c61; }
+      .hero { min-height: 610px; display: grid; grid-template-columns: 1fr 1.1fr; gap: 32px; align-items: center; padding: 46px 6vw 22px; }
+      .intro { position: relative; }
+      .eyebrow { display: inline-block; color: #7b8c92; letter-spacing: .14em; text-transform: uppercase; font-size: 11px; margin-bottom: 18px; }
+      h1 { font-family: Caveat, cursive; font-size: clamp(70px, 10vw, 126px); line-height: .72; font-weight: 700; margin: 0; letter-spacing: -.05em; }
+      h1 span { display: block; padding-left: .35em; }
+      .copy { max-width: 340px; font-size: 14px; line-height: 1.8; margin: 30px 0; color: #635c54; }
+      button { appearance: none; cursor: pointer; padding: 14px 19px; border: 2px solid var(--ink); background: var(--blush); border-radius: 5px; box-shadow: 4px 4px 0 var(--ink); color: var(--ink); font-family: inherit; font-size: 12px; font-weight: 500; transition: transform .18s, box-shadow .18s; }
+      button:hover { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--ink); }
+      .heart { color: #db8d86; font-size: 24px; vertical-align: middle; }
+      .postcard-wrap { position: relative; justify-self: center; width: min(100%, 490px); }
+      .tape { position: absolute; width: 110px; height: 31px; background: rgba(217,233,237,.78); top: -15px; left: 50%; transform: translateX(-50%) rotate(-3deg); z-index: 2; }
+      .postcard { position: relative; background: var(--paper); border: 2px solid var(--ink); padding: 12px; box-shadow: 9px 11px 0 rgba(48,45,42,.12); transform: rotate(2deg); transition: transform .4s ease; }
+      .postcard:hover { transform: rotate(0deg) translateY(-5px); }
+      .postcard img { display: block; width: 100%; border: 1px solid #e3d8c9; background: #fbf3e5; }
+      .caption { display: flex; justify-content: space-between; align-items: center; padding: 10px 4px 2px; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: #796f65; }
+      .caption strong { color: var(--ink); font-family: Caveat, cursive; font-size: 24px; letter-spacing: 0; text-transform: none; }
+      .doodle { position: absolute; right: -18px; bottom: -34px; width: 86px; height: 65px; border-bottom: 4px solid var(--ink); border-radius: 50%; transform: rotate(-14deg); }
+      .doodle::after { content: "♥"; position: absolute; right: 2px; bottom: 10px; font: 34px Caveat, cursive; color: var(--blush); }
+      .note { margin: 10px auto 0; max-width: 760px; padding: 19px 26px; background: var(--sky); border: 2px solid var(--ink); transform: rotate(-.7deg); text-align: center; font-family: Caveat, cursive; font-size: clamp(25px, 3vw, 34px); line-height: 1; }
+      .note small { display: block; padding-top: 7px; font: 10px "DM Mono", monospace; letter-spacing: .08em; text-transform: uppercase; }
+      footer { display: flex; justify-content: space-between; gap: 18px; padding: 50px 0 0; color: #7d7469; font-size: 10px; text-transform: uppercase; letter-spacing: .08em; }
+      .hidden { display: none; }
+      .memory-modal { position:fixed; inset:0; z-index:10; display:grid; place-items:center; padding:20px; background:rgba(48,45,42,.52); opacity:0; visibility:hidden; transition:opacity .24s ease, visibility .24s; }
+      .memory-modal.is-open { opacity:1; visibility:visible; }
+      .memory-sheet { position:relative; width:min(980px, 100%); max-height:min(760px, calc(100vh - 40px)); overflow:auto; padding:37px 42px 46px; border:2px solid var(--ink); background:#eedac4; box-shadow:10px 12px 0 rgba(48,45,42,.2); }
+      .memory-sheet::before { content:""; position:absolute; inset:0; opacity:.3; background-image:radial-gradient(#b79980 .8px, transparent .8px); background-size:9px 9px; pointer-events:none; }
+      .close { position:absolute; z-index:2; top:15px; right:15px; width:34px; height:34px; padding:0; border-radius:50%; background:var(--paper); box-shadow:2px 2px 0 var(--ink); font:23px/1 Arial,sans-serif; }
+      .memories-heading, .memories-subtitle, .photo-grid, .memory-hint { position:relative; z-index:1; }
+      .memories-heading { margin:0; text-align:center; font:700 clamp(42px,7vw,70px)/.8 Caveat,cursive; }
+      .memories-subtitle { margin:14px auto 32px; text-align:center; color:#766c61; font-size:10px; letter-spacing:.09em; text-transform:uppercase; }
+      .photo-grid { display:grid; grid-template-columns:repeat(3, 1fr); gap:39px 43px; align-items:start; }
+      .polaroid { position:relative; padding:11px 11px 37px; background:var(--paper); border:1px solid #e5d9c8; box-shadow:5px 7px 10px rgba(66,48,32,.24); transition:transform .2s ease, box-shadow .2s ease; }
+      .polaroid { cursor:pointer; }
+      .polaroid:hover { transform:translateY(-7px) rotate(0deg) !important; box-shadow:8px 13px 16px rgba(66,48,32,.26); }
+      .polaroid::before { content:""; position:absolute; top:-15px; left:50%; width:76px; height:25px; transform:translateX(-50%) rotate(-3deg); background:rgba(217,233,237,.88); }
+      .polaroid:nth-child(2n)::before { background:rgba(241,208,200,.86); transform:translateX(-50%) rotate(4deg); }
+      .polaroid:nth-child(3n)::before { background:rgba(247,230,180,.86); }
+      .polaroid:nth-child(1) { transform:rotate(-5deg); } .polaroid:nth-child(2) { transform:rotate(3deg); margin-top:21px; } .polaroid:nth-child(3) { transform:rotate(-2deg); }
+      .polaroid:nth-child(4) { transform:rotate(4deg); margin-left:20px; } .polaroid:nth-child(5) { transform:rotate(-3deg); margin-top:8px; } .polaroid:nth-child(6) { transform:rotate(5deg); margin-right:20px; }
+      .placeholder { aspect-ratio:1.15; display:flex; align-items:center; justify-content:center; color:#8d8174; background:linear-gradient(135deg, var(--sky) 0 50%, #f8ead3 50% 100%); border:1px dashed #a99b8c; }
+      .placeholder svg { width:44%; height:44%; opacity:.65; }
+      .photo-image { display:block; width:100%; aspect-ratio:1.15; object-fit:cover; border:1px solid #e3d8c9; background:var(--sky); }
+      .photo-caption { position:absolute; bottom:8px; left:11px; right:11px; font:600 21px/1 Caveat,cursive; text-align:center; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+      .memory-hint { margin:32px auto 0; width:max-content; max-width:100%; padding:9px 14px; border:2px solid var(--ink); background:var(--blush); font:600 21px Caveat,cursive; transform:rotate(-1deg); }
+      .letter-view { position:fixed; inset:0; z-index:20; display:grid; place-items:center; padding:20px; background:rgba(48,45,42,.7); opacity:0; visibility:hidden; transition:opacity .2s ease, visibility .2s; }
+      .letter-view.is-open { opacity:1; visibility:visible; }
+      .letter-card { position:relative; width:min(550px,100%); max-height:calc(100vh - 40px); overflow:auto; padding:14px 14px 30px; background:var(--paper); border:2px solid var(--ink); box-shadow:9px 11px 0 rgba(48,45,42,.24); transform:rotate(-1deg); }
+      .letter-image { width:100%; min-height:300px; display:grid; place-items:center; overflow:hidden; background:var(--sky); border:1px solid #e3d8c9; }
+      .letter-image .placeholder { width:100%; min-height:300px; border:none; }
+      .letter-image .photo-image { width:100%; height:auto; max-height:52vh; aspect-ratio:auto; object-fit:contain; border:none; }
+      .letter-copy { margin:25px 14px 0; padding:20px 22px; border-top:2px solid var(--ink); background:#fff9ec; font:600 29px/1.08 Caveat,cursive; text-align:center; }
+      .letter-copy small { display:block; padding-top:8px; color:#766c61; font:10px "DM Mono",monospace; letter-spacing:.06em; text-transform:uppercase; }
+      @media (max-width: 720px) { .hero { grid-template-columns: 1fr; padding: 60px 4vw 30px; gap: 50px; } .intro { text-align: center; } .copy { margin-inline: auto; } .sun { top: -15vw; } footer { padding-top: 35px; } .memory-sheet { padding:42px 26px 34px; } .photo-grid { grid-template-columns:repeat(2,1fr); gap:36px 25px; } .polaroid:nth-child(4), .polaroid:nth-child(6) { margin-left:0; margin-right:0; } }
+      @media (max-width: 430px) { .photo-grid { grid-template-columns:1fr; max-width:240px; margin:auto; } .polaroid:nth-child(n) { margin:0; } }
+    </style>
+  </head>
+  <body>
+    <div class="sun"></div><div class="cloud one"></div><div class="cloud two"></div>
+    <main>
+      <nav><span class="badge">a little love note</span><span class="nav-note">for the soft-hearted</span></nav>
+      <section class="hero">
+        <div class="intro">
+          <span class="eyebrow">a warm wish, gently delivered</span>
+          <h1>please<br /><span>stay, Love.</span></h1>
+          <p class="copy">We'll find the reason for us to be stronger and rebuild the trust back okay?</p>
+          <button id="replay" type="button">replay the little moment <span class="heart">♥</span></button>
+        </div>
+        <div class="postcard-wrap">
+          <div class="tape"></div>
+          <div class="postcard">
+            <img id="snoopyGif" src="snoopy_signpost_please_stay_love.gif" alt="A Snoopy-style white beagle sits beneath a signpost that reads please stay, Love." />
+            <div class="caption"><strong>with all my heart</strong><span>one tiny wish</span></div>
+          </div>
+          <div class="doodle"></div>
+        </div>
+      </section>
+      <aside class="note">I will always see you and love you for the rest of my life <small>I LOVE YOU ALWAYS, LOVE</small></aside>
+      <footer><span>MADE BY: LOVE</span><span>♥ keep close</span></footer>
+    </main>
+    <section class="memory-modal" id="memoryModal" aria-hidden="true" role="dialog" aria-modal="true" aria-labelledby="memoriesTitle">
+      <div class="memory-sheet">
+        <button class="close" id="closeMemories" type="button" aria-label="Close memories">×</button>
+        <h2 class="memories-heading" id="memoriesTitle">our little memories</h2>
+        <p class="memories-subtitle">photos saved in all the softest corners</p>
+        <div class="photo-grid">
+          <article class="polaroid" tabindex="0" role="button" data-letter="Beautiful enough to make my heart pound every time I see you, Love"><img class="photo-image" src="images/Love1.jfif" alt="Memory photo one" /><div class="photo-caption">B</div></article>
+          <article class="polaroid" tabindex="0" role="button" data-letter="You provide infinite amount of love, where no one else can give"><img class="photo-image" src="images/Love2.jfif" alt="Memory photo two" /><div class="photo-caption">I</div></article>
+          <article class="polaroid" tabindex="0" role="button" data-letter="You have this Amazing personality na I can't describe"><img class="photo-image" src="images/Love3.jfif" alt="Memory photo three" /><div class="photo-caption">A</div></article>
+          <article class="polaroid" tabindex="0" role="button" data-letter="I Need you in every journey, In every chapter of my life"><img class="photo-image" src="images/Love4.jfif" alt="Memory photo four" /><div class="photo-caption">N</div></article>
+          <article class="polaroid" tabindex="0" role="button" data-letter="Consistently loving you without question"><img class="photo-image" src="images/Love5.jfif" alt="Memory photo five" /><div class="photo-caption">C</div></article>
+          <article class="polaroid" tabindex="0" role="button" data-letter="Always the woman who I want to marry and grow old with"><img class="photo-image" src="images/Love6.jfif" alt="Memory photo six" /><div class="photo-caption">A</div></article>
+        </div>
+        <div class="memory-hint">replace these spaces with your favorite pictures ♥</div>
+      </div>
+    </section>
+    <section class="letter-view" id="letterView" aria-hidden="true" role="dialog" aria-modal="true" aria-label="Enlarged memory and letter">
+      <div class="letter-card"><button class="close" id="closeLetter" type="button" aria-label="Close enlarged memory">×</button><div class="letter-image" id="letterImage"></div><div class="letter-copy" id="letterCopy"></div></div>
+    </section>
+    <script>
+      const replay = document.querySelector('#replay');
+      const modal = document.querySelector('#memoryModal');
+      const closeMemories = document.querySelector('#closeMemories');
+      const letterView = document.querySelector('#letterView');
+      const closeLetter = document.querySelector('#closeLetter');
+      const letterImage = document.querySelector('#letterImage');
+      const letterCopy = document.querySelector('#letterCopy');
+      let selectedPhoto = null;
+      replay.addEventListener('click', () => {
+        modal.classList.add('is-open');
+        modal.setAttribute('aria-hidden', 'false');
+        closeMemories.focus();
+      });
+      const closeModal = () => { modal.classList.remove('is-open'); modal.setAttribute('aria-hidden', 'true'); replay.focus(); };
+      closeMemories.addEventListener('click', closeModal);
+      modal.addEventListener('click', (event) => { if (event.target === modal) closeModal(); });
+      const openLetter = (photo) => { selectedPhoto = photo; letterImage.innerHTML = photo.querySelector('.photo-image').outerHTML; letterCopy.innerHTML = `${photo.dataset.letter}<small>${photo.querySelector('.photo-caption').textContent}</small>`; letterView.classList.add('is-open'); letterView.setAttribute('aria-hidden','false'); closeLetter.focus(); };
+      document.querySelectorAll('.polaroid').forEach((photo) => { photo.addEventListener('click', () => openLetter(photo)); photo.addEventListener('keydown', (event) => { if (event.key === 'Enter' || event.key === ' ') { event.preventDefault(); openLetter(photo); } }); });
+      const closeLetterView = () => { letterView.classList.remove('is-open'); letterView.setAttribute('aria-hidden','true'); if (selectedPhoto) selectedPhoto.focus(); };
+      closeLetter.addEventListener('click', closeLetterView);
+      letterView.addEventListener('click', (event) => { if (event.target === letterView) closeLetterView(); });
+      document.addEventListener('keydown', (event) => { if (event.key === 'Escape' && letterView.classList.contains('is-open')) closeLetterView(); else if (event.key === 'Escape' && modal.classList.contains('is-open')) closeModal(); });
+    </script>
+  </body>
+</html>
